@@ -402,6 +402,9 @@ class App extends React.Component{
 ```
 ### 表单处理
 #### 受控组件
+
+
+
 + htlm中的表单元素是可以输入的，也就是改变了自己的状态
 + 而 React中可变状态是保存在state中，并且只希望用setState() 方法来改变 ？
   + React将state的表单元素值绑定在一起，由state的值来控制表单元素的值
@@ -469,8 +472,82 @@ class App extends React.Component{
       </select>
 
 
-      // 输入框
+      // 复选框
       <input type='checkbox' checked={this.state.isCheck}
+          onChange={e =>this.handleisCheck}
+        />
+    )
+   }
+}
+
+```
+
+
+
++ 多表单元素优化步骤
+  + 给表单元素添加name的属性，名称与state相同
+  + 根据单元素类型获取对应值
+  + 在change事件中通过处理程序中的[name]来修改对应的state
+```js
+ <input type='text'     
+        value={this.state.txt}
+        name="txt"
+        onChange={this.handleForm}
+        />
+
+    // 因为复选框是 checkbox 其他的都是 value
+  const value = target.type === 'checkbox'
+        ? target.checked  :   target.value
+
+   this.setState(
+     { [name]:value   }
+   )
+
+```
+```js
+// 改造后
+class App extends React.Component{
+    state={
+      text:"输入框"
+      content:"富文本框"
+      city:"sh"
+      isCheck:false
+    } 
+   handleChange= e => {
+    // 获取当前的dom对象
+    const target = e.target
+    // 根据类型获取值
+    const value = target.type === 'checkbox'
+        ? target.checked  :   target.value
+    // 获取name
+    const name = e.name
+
+    this.setState({
+     [name]:value
+    })
+    },
+ 
+   render(){
+    return(
+      // 输入框
+         <input     name='txt' type='text' value={this.state.txt}
+          onChange={e =>this.handleChange}
+        />
+       
+      // 富文本框
+         <textarea  name='content' value={this.state.content} 
+          onChange={e =>this.handlecontent}
+        />
+      // 下拉框
+         <select    name='city' value={this.state.city}>
+          <option value='sh'>上海</option>
+          <option value='gz'>广州</option>
+          <option value='sz'>深圳</option>
+      </select>
+
+
+      // 复选框
+         <input    name='isCheck' type='checkbox' checked={this.state.isCheck}
           onChange={e =>this.handleisCheck}
         />
     )
