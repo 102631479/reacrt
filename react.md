@@ -401,10 +401,8 @@ class App extends React.Component{
 }
 ```
 ### 表单处理
+
 #### 受控组件
-
-
-
 + htlm中的表单元素是可以输入的，也就是改变了自己的状态
 + 而 React中可变状态是保存在state中，并且只希望用setState() 方法来改变 ？
   + React将state的表单元素值绑定在一起，由state的值来控制表单元素的值
@@ -521,7 +519,6 @@ class App extends React.Component{
         ? target.checked  :   target.value
     // 获取name
     const name = e.name
-
     this.setState({
      [name]:value
     })
@@ -539,7 +536,7 @@ class App extends React.Component{
           onChange={e =>this.handlecontent}
         />
       // 下拉框
-         <select    name='city' value={this.state.city}>
+         <select name='city' value={this.state.city}>
           <option value='sh'>上海</option>
           <option value='gz'>广州</option>
           <option value='sz'>深圳</option>
@@ -547,7 +544,7 @@ class App extends React.Component{
 
 
       // 复选框
-         <input    name='isCheck' type='checkbox' checked={this.state.isCheck}
+         <input  name='isCheck' type='checkbox' checked={this.state.isCheck}
           onChange={e =>this.handleisCheck}
         />
     )
@@ -556,3 +553,144 @@ class App extends React.Component{
 
 ```
 #### 非受控组价
++ 调用React.createRef()方法创建一个ref对象
+```js
+constructor(){
+   super()
+   this.txtRef=React.createRef()
+}
+```
+
++ 将创建好的Ref 添加到文本框里面
+```html
+<input type='text' ref={this.txtRef} />
+```
+
++ 通过ref对象获取文本框的值  
+```js
+console.log(this.txtRef.current.value)
+```
+
+
+```js
+ class App extends React.Component{
+   constructor(){
+     super()
+     this.txtRef=React.createRef()
+  },
+   getText=()=>{
+     console.log('文本框的值:',this.txtRef.current.value)
+
+  },
+  render(){
+    return(
+      <div>
+       <input   type='text'  ref={this.txtRef}/>
+       <button onClick={this.txtRef}>获取文本框的值</button>
+      </div>
+
+    )
+  }
+}
+```
+# React组件基础
++ 组件的创建方式：函数组件和类组件
++ 无状态（函数组价），负责静态结构展示
++ 有状态(类组件)，负责更新Ui，让页面动起来
++ 绑定事件注意this的指向问题
++ 推荐使用受控组件来处理表单
++ 完全利用js语言的能力创建组件，这是React的思想
+
+
+
+## 案例一   评论列表
++ 思路介绍
+   + 在state中初始化列表数据
+   + 在使用的map方法便利state中的列表数据
+   + 给每个遍历的li元素添加key属性
+   + 给按钮添加点击事件
+   + 在事件处理程序中通过state获取评论
+   + 将评论添加到state中，并调用setState()方法更新视图
+
+
+```js
+ class App extends React.Component{
+  state={
+    comments: [{
+       {id:1,text:"我是第1"},    
+       {id:2,text:"我是第2"},
+       {id:3,text:"我是第3"},
+    }]
+  },
+  ```
+  ```js
+  renderList = () =>{
+      // 条件渲染语句
+   return  this.state.comments.length === 0 ? (<div className='no-comment'>暂无评论</div>):
+       <ul>
+               {this.state.coments.map(item=>(
+                 <li key={item.id}>
+                  <h3>评论人:{item.name}</h3>
+                  <p>评论内容：{item.usercoment}</p>
+                 </li>
+               ))}
+               <li>
+
+      </ul>
+
+  }
+  ```
+  ```js
+  handleForm= e =>{
+    const {name,value}=e.target
+    this.setState({
+      [name]:value
+    })
+  },
+  addCommit=()=>{
+    const {comments,username,usercoment} = this.state
+    const newComments = [{
+      id:Math.random(),
+      name:username, 
+      usercoment:usercoment
+    },...comments]
+    this.setState = newComments
+  },
+  render(){
+    const {username,usercoment} = this.state
+    return(
+      // 评论发表
+    <div className='app'>
+      <div>
+        <input 
+        className='user' 
+        type='text'
+        palceholder="请输入评论人"
+        value={username}
+        name='username'
+        onChange={this.handleForm}/>
+        <br/>
+        <textarea
+          className='content'
+          cols='30'
+          row="10"
+          value={usercoment}
+          name='usercoment'
+          palceholder="请输入评论内容"
+          onChange={this.handleForm}/>
+        />
+        <br/>
+        <button onClic={this.addCommit}>发表评论</button>
+      </div>
+      {
+        this.renderList()
+      }
+    </div>
+    )
+  }
+ }
+
+```
+
+
+
