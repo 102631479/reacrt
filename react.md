@@ -573,9 +573,11 @@ console.log(this.txtRef.current.value)
 
 
 ```js
+// 不建议使用
  class App extends React.Component{
    constructor(){
      super()
+    //  创建一个ref 对象
      this.txtRef=React.createRef()
   },
    getText=()=>{
@@ -611,6 +613,8 @@ console.log(this.txtRef.current.value)
    + 给按钮添加点击事件
    + 在事件处理程序中通过state获取评论
    + 将评论添加到state中，并调用setState()方法更新视图
+   + 边界情况：清空文本框
+   + 边界情况：非空判断
 
 
 ```js
@@ -649,12 +653,27 @@ console.log(this.txtRef.current.value)
   },
   addCommit=()=>{
     const {comments,username,usercoment} = this.state
+   
+
+  //  输入空的字符串的时候判断
+    if(username.trim()===''|| usercoment.trim()===''){
+      alert("请输入评论内容")
+      return
+    }
+     
     const newComments = [{
-      id:Math.random(),
+      id:Math.random(),  //渲染的时候 添加一个随机数当做唯一key
       name:username, 
       usercoment:usercoment
     },...comments]
-    this.setState = newComments
+    // 渲染页面显示数据
+    this.setState（{
+         comments:newComments   ,
+        //  下面是输入完毕以后 进行置空输入框
+         username:"",
+         usercoment:"",
+
+    }）
   },
   render(){
     const {username,usercoment} = this.state
@@ -667,6 +686,7 @@ console.log(this.txtRef.current.value)
         type='text'
         palceholder="请输入评论人"
         value={username}
+        // 原本是 this.state.username   上面已经定义了所以就不用了
         name='username'
         onChange={this.handleForm}/>
         <br/>
@@ -691,6 +711,258 @@ console.log(this.txtRef.current.value)
  }
 
 ```
+
+
+# React组件进阶
+ + 能够使用prop 组件接受数据   
+ + 父子通讯
+ + 兄弟通讯
+ + 添加prop校验
+ + 生命周期函数
+ + 高阶组件的应用
+ + 组件介绍
+ + 组件prop
+ + Context
+ + prop深入
+ + render-prop和高阶组件
+
+
+### 组件通讯介绍
++ 组件是独立封闭的  默认情况下只能使用自己的本身的数据在组件进化过程中，我们将一个完整的功能拆分成多个组件。
+#### 组件的通讯props 
+- props的作用，接收传递组件的数据
+- 传递数据：传递标签添加的数据的数据
+- 传递数据：给组件标签添加属性
+- 接收数据：函数组件通过参数prop接收数据 .类组件通过this.props接收数据
+```js
+// 组件
+    <Hello name="jack" age={19} />
+// 函数
+
+
+    let Hello=()=>{
+      console.log(props)
+      return (
+        <div>接收的数据：{prop.name}<div/>
+      )
+    }
+```
+```js
+// 页面实例
+import React from 'react'
+import React from 'react - dom'
+    function Hello=(props)=>{
+      console.log(props)
+      return (
+        <div> 接收的数据：{prop.name} <div/>
+      )
+    }
+// 1 ,传递数据 
+    RenderDOM.render(<Hello name="jack"  />,document.getElement('root'))
+```
+```js
+// 类组件的传递方式
+import React from 'react'
+import React from 'react - dom'
+class Hello extents React.Component{
+   render(){
+     console.log(this.props)//接收组件
+      return(
+        <div>
+          <h1> props:{this.props}</h1>
+        <div/>
+      )
+   }
+}
+// 1 ,传递数据 
+    RenderDOM.render(<Hello name="jack"  />,document.getElement('root'))
+```
+#### props特点
+- 可以给组件任意类型的数据
+- props.是一个  只读  的对象  是不支持修改的
+- 注意：使用类组件时，如果写了构造函数，应该将props 传递给super(), 否则在构造函数中无法获取props
+
+```js
+//  name 默认是String  
+//  可以是数组
+// 也可以是一个函数
+// 函数组件中  可以直接  props.fn()  进行调用
+// 甚至可以用 jsx 传递   直接渲染   {props.tag}
+ 
+
+    RenderDOM.render(<Hello name="jack" age={19} colors={['red','green','blue']} 
+    fn={()=>console.log('这是一个函数')}
+    tag= {<p>我是一个jsx<p/>}
+    />
+    ,document.getElement('root'))
+
+```
+
+```js
+// 类组件的传递方式
+import React from 'react'
+import React from 'react - dom'
+class Hello extents React.Component{
+  constructor(){
+    super()
+    // 这是拿不到的
+    console.log(this.props)
+  }
+
+// 正确的写法  把props 传递给构造函数
+   constructor(props){
+    super(props)
+    // 这是拿不到的
+    console.log(props)   //不用写this因为props 已经作为一个形参了
+  }
+
+
+   render(){
+    //  这里可以拿到props的
+     console.log(this.props)//接收组件
+      return(
+        <div>
+          <h1> props:{this.props}</h1>
+        <div/>
+      )
+   }
+}
+
+
+// 1 ,传递数据 
+   RenderDOM.render(<Hello name="jack" age={19} colors={['red','green','blue']} 
+    fn={()=>console.log('这是一个函数')}
+    tag= {<p>我是一个jsx<p/>}
+    />
+    ,document.getElement('root'))
+```
+
+
+#### 组件通讯的三种方式
+
+##### 父组件传递给子组件  父传子
++ 父组件提供要传递的state 的数据
++ 给子组件标签添加属性，值为state中的数据
++ 子组件中通过props 接收父组件传递的值
+  
+```js
+class Prent extends React.Component {
+   state={
+     lastName:"王小二"
+   }
+   render(){
+    return <div> 传递数据给子组件：<Child name={this.state.lastName}/></div>
+  }
+}
+
+const Child = props =>{
+  // props 就是父组件传递的对象
+    console.log(props)
+   return (
+     <div className="chlid">
+          <p>子组件：接收父组件的数据</p>
+     </div>
+   )
+}
+RenderDOM.render(<Prent/>,document.get.......)
+```
+#####   子传父
+
+  > 思路：利用回调函数 父组件提供回调函数，子组件调用，将要传递的数据作为回调函数的参数
+
+  1. 父组件提供一个回调函数（用于接收数据）
+  2. 子组件通过props调用回调函数
+  3. 将子组件的数据通过数据传递给回调函数
+    
+```js
+class Prent extends React.Component {
+  getChildMsg=(msg)=>{
+       console.log("接收到子组件的数据",msg)
+  }
+  render(){
+    return (
+      <div>子组件：<Child getMsg={this.getChildMsg}></div>
+    )
+  }
+}
+```
+```js
+// 传递实例 
+
+
+// 父组件
+class Prent extends React.Component {
+  getChildMsg= data =>{
+       console.log("接收到子组件的数据", data )
+  } 
+  render(){
+    return (
+      <div>父组件 <Child getMsg={this.getChildMsg}>
+      </div>
+    )
+  }
+}
+```
+
+```js
+// 子组件   
+class Child extends React.Component {
+  state={name:"王小二"}
+  handleClick=()=>{
+    // 子组件调用 父组件传递的回调函数
+    this.props.getMsg(this.state.name)
+  }
+  render(){
+    return (
+      <div>子组件<button onClick={this.handleClick}>点击传递数据</button>
+      </div>
+    )
+  }
+}
+```
++ 注意this指向的问题
+
+#### 兄弟组件之间的通讯
+
+> 将共享的数据提升到公共组件中，由公共父组件管理这个状态 
+> 思想：状态提升
+> 公共父组件职责：1:提升共享状态  2:提升共享组件的状态管理方法  
+> 要通讯的子组件 只用通过props接收状态或者操作状态方法即可
+
+```js
+// 父组件  
+
+class Prent extends React.Component {
+  state={
+    num:"0"
+  }
+  handleClick=()=>{
+   this.setState({
+     num:this.state.num + 1
+   })
+  }
+  render(){
+    return (
+      <div>
+      <Child1 num={this.state.num}>
+      <Child2 handleClick={this.handleClick}>
+      </div>
+    )
+  }
+}
+
+```
+```js
+// 两个子组件
+ const Child1=props=>{
+   return <h1>计数器：{props.num}</h1>
+ }
+
+ const Child2=props=>{
+   return <button onClick={（）=>props.handleClick()}>组件通讯数据加1</button>
+ }
+```
+
 
 
 
