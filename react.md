@@ -962,7 +962,274 @@ class Prent extends React.Component {
    return <button onClick={（）=>props.handleClick()}>组件通讯数据加1</button>
  }
 ```
+## Context
+>思考:App组件要传递数据给Child组件，应该如何处理
++ 更好的姿势使用：Context
++ 作用：跨组件传递数据（比如：主题 ，语言等）
+  
+- 使用步骤 
+1. 调用React.createContext()创建 Provider（提供数据）和 Consumer(消费数据) 两个组件
+```js
+// 一个是数据的提供 一个负责数据消费
+  const {Provider , Consumer}=React.createContext()
+```
+2. 使用 Provider 组件作为节点
+
+```js
+ <Provider>
+    <div>
+       <Child1/>
+    </div>
+ <Provider>
+```
+3. 设置 value 属性  表示要传递的数据
+
+```js
+ <Provider value='pink' >
+ <Provider>
+
+
+```
+4. 调用  Consumer 组件的数据
+
+```js
+ <Consumer> 
+      {data=><span>data参数接收到的数据 -- {data}</span>}
+ </Consumer>
+
+```
+总结：
+1. 如果两个组件是多层嵌套的 可以使用 Context 传递实现组件通讯
+2. Context提供2个组件：Provider  负责提供数据  Consumer  负责消费数据
+
+
+## props 深入
++ children 属性： 表示组件标签的子节点。当组件标签有子节点的时候，props就会有属性  
++ children 属性与普通的props一样，值可以是任意值（文本，React元素，组件，甚至是函数）
+  
+   
+```js
+// 类似于 vue 插槽
+const App =props=>{
+  console.log(props)
+  return (
+    <div>
+        <h1>组件标签的子节点：</h1>
+        {props.children}
+    </div>
+  )
+}
+ReactDOM.render(<APP>我是子节点</APP>,.....)
+```
+```js
+// 可以是函数
+const App =props=>{
+  console.log(props)
+  props。children()
+  return (
+    <div>
+        <h1>组件标签的子节点：</h1>
+        {props.children}
+    </div>
+  )
+}
+ReactDOM.render(<APP>{()=>console.log('这是一个函数的子节点')}</APP>,.....)
+```
+
+### props 校验 
++ 对于组件来说.props是外来的 需要校验数据的格式
++ 如果传入数据格式不对，可能导致组件内部错误
++ 关键问题：组价的使用者不知道错误的原因
++ props校验：允许在创建的时候，就指定，props的类型还有格式
++ 作用：捕获使用组件的时候因为props导致错误，给出明确的错误提示，增加组建的安全性
+
+
+**使用**：
+
+
+ + 第一步： 安装prop-types 
+```js
+  npm i porps-type
+```
+
++ 第二步： 导入
+```js
+  import PropTypes form ‘prop-types’
+```
+
++ 第三步： 使用组件名字 propTypes={}来给组件添加校验规则
+```js
+import PropTypes form "prop-types"
+
+function App(props){
+  return(
+    <h1>你好，{props.color}</h1>
+  )
+}
+App.propTypes={
+  // 约定color属性为 array类型
+  // 如果类型不对，就会报错，便于分析错误原因
+  color:PropTypes.array
+}
+```
+4. 校验规则通过propTypes对象来指定
 
 
 
+**约束规则** 
+1. 常见类型 array  bool   function  number  object   string
+2. React元素类型 element
+3. 必填项：isRequired
+4. 特定结构的对象：shape({})
+   
 
+```js
+//  常见类型
+  optionalFunc:PropTypes.func
+// 必选
+  optionalFunc:PropTypes.func.isRequired
+// 特定结构的对象
+  optionalObjectWithShape:PropTypes.shape({
+    color:PropTypes.array,
+    findSize:PropTypes.number
+  })
+```
+
+#### porp的默认值
++ 场景：分页组件->每页组件的默认值
+ + 没有传入值的时候生效
+```js
+function App(props){
+  return(
+    <h1>你好，{props.color}</h1>
+  )
+}
+App.defaultProps={
+  color:"red"
+}
+```
+
+### 组件的生命周期
++ 意义：组建的生命周期有助于理解组件的运行方式，完成更复杂的组件功能，分析组件错误的原因
++ 生命周期：组件冲创建到消亡的过程
++ 声明周期的每个阶段伴随着调用的一些方法，这些方法就是声明周期的钩子函数
++ 为开发人员在不同的阶段操作提供了时机
++ 只有类组件才有生命周期
+  
+
+#### 生命周期的三个阶段  
+学习思路：
+1. 每个阶段执行的时机
+2. 每个阶段执行的顺序
+3. 每个阶段函数执行的作用
+   ##### 创建的时候
+   + 执行时机：组件创建的时候（页面加载时）
+   + 执行顺序：  constuctor ->  render() ->   react更新DOM和refs componentDidMount
+```js
+class App extends React.Component {
+  costructor(prop){
+    super(props)
+    // 下面打印出来的是一个感叹号 的提示在控制塔中
+    console.warn('生命周期的钩子函数：costructor')
+  }
+  componentDidMount(){
+    // 下面打印出来的是一个感叹号 的提示在控制塔中
+     console.warn('生命周期的钩子函数：componentDidMount')
+  }
+  render(){
+    // 下面打印出来的是一个感叹号 的提示在控制塔中
+    console.warn('生命周期的钩子函数：render')
+    return (
+      <div>
+      我是盒子
+      </div>
+    )
+  }
+}
+```
+**总结** 
+|  钩子函数  | 触发时机  | 作用 |
+|  ----  | ----  | ---- |
+|  costructor | 最先执行 | 1. 初始化state  2.为事件处理程序绑定this
+| render  | 每次组件渲染都会触发 | 渲染ui（注意：不能调用setState()）
+| componentDidMount | 组件挂载（完成dom渲染）后 | 1.发送网络请求  2.Dom操作 |
+
+
+
+   ##### 更新阶段
+   +    New props   setState()    forceUpdate()   触发的时候都会导致组件进行更新  Render（） 
+   + 周期组成    render ->  React的DOM和refs  -> compoentDidUpdate
+   + forceUpdate()  强制渲染
+   +  componentDidMount DOM重新渲染完成后进行触发  要使用 setState() 必须放在一个if条件中
+
+```js
+class App extends React.Component {
+  costructor(prop){
+    super(props)
+    console.warn('生命周期的钩子函数：costructor')
+  }
+  // 如果要在 setState（）中更新状态 必须放在一个if条件语句中
+  // 如果直接调用setState()状态  会导致dom递归更新
+  state={
+    count:0
+  }
+  componentDidMount(prevProps){
+    // 错误写法
+    this.setState({})
+
+    // 正确写法
+    // 做法比较更新前后的props是否相同，来决定是否更新或者渲染组件
+    consloe.log("上一次的porps",prevProps,'当前的props',this.props)
+    if(prevProps."参数" ！== this.porps."参数"){
+     this.setState({})
+    //  一般这里获取接口数据
+    }
+
+  }
+  handleClick=()=>{
+   this.setState({
+     count:this.state.count+1
+   })
+  }
+  render(){
+    console.warn('生命周期的钩子函数：render')
+    return (
+          <Counter count={this.state.count}></Counter>
+    
+           <button onClick={this.handleClick}>点击加1</button>
+    )
+  }
+}
+class Counter extends React.Conponent{
+  render(){
+    return <h1>统计打豆豆的打击次数：{this.props.count}</h1>
+  }
+}
+```
+
+
+  ##### 卸载函数
+  + 执行时机： 组件从页面消失  
+   +   生命周期函数钩子函数：componentWillUnmout
+```js
+
+
+class Counter extends React.Conponent{
+  componentDidMount(){
+    this.timerID=setInterval(()=>{
+      console.log("定时器在执行")
+    })
+  }
+
+  render(){
+    return <h1>统计打豆豆的打击次数：</h1>
+  }
+ componentWillUnmout(){
+   console.log("生命周期函数钩子函数：componentWillUnmout")
+  //  清理定时器  
+   clearInterval(this.timerID)
+ }
+
+
+}
+```
