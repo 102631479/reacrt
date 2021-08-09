@@ -1229,7 +1229,349 @@ class Counter extends React.Conponent{
   //  清理定时器  
    clearInterval(this.timerID)
  }
-
-
 }
 ```
+
+
+#### React组件复用的概述
+  
++ 思考：如果两个组件中的部分功能相同，该如何处理。
++ 处理方式：复用相似的功能（联想函数的封装）
++ 复用什么？1. state 2. 操作state的方法（组件状态逻辑）
++ 两种方式：1. render  props 模式 2.高阶组件（HOC）
++ 注意：这两种方式不是新的API，而是利用React自身特点的编码技巧，演化而成的固定模式（写法） 
+
+##### Render props 模式
++ 思路:将复用的state和操作state的方法封装到一个组件中
++ 问题1 如何拿到该组件的服用的state？
++ 在使用组件的时候，添加一个值为函数的porp通过函数参数来获取（需要组件内部的实现）  
+```js
+// 参数使用
+<Mouse render={（mouse）=>{}}>
+```
+
+```js
+// 拿到鼠标的返回值
+<Mouse render={（mouse）=>（
+<p>鼠标当前的位置{mouse.x},{mouse.y}</p>
+)}>
+```
+
+
+> 使用步骤
+
+1. 创建Mouse组件，在组件中提供复用的状态逻辑代码（1.状态 2.操作状态的方法）
+2. 将要复用的状态作为 props.rener（state）方法的参数，暴露到组件外部
+3. 使用props.render() 的返回值作为要渲染的内容
+
+```js
+class Mouse extends React.Conponent{
+
+}
+
+```
+```js
+// 组件实例
+class Mouse extends React.Conponent{
+  state={
+    // 鼠标位置的状态
+    x:0,
+    y:0,
+  }
+  handleMouseMove = e =>{
+    this.setState({
+      //  拿到鼠标位置
+      x : e.clientX,
+      Y : e.clientY,
+    })
+  }
+  // 监听鼠标移动的代码   生命周期钩子函数
+  componentDidMount(){
+    window.addEvebtListener('mousermove',this.handleMouseMove)
+  }
+
+  Render(){
+    // 没有渲染组件代码 想要数据自己渲染就行了
+    return this.props.render(this.state)
+  }
+}
+
+class App extends React.Conponent{
+  render(){
+    return(
+      <div></div>
+      <Mouse render={(mouse)=>{
+        return(
+          <p>鼠标位置：{mouse.x},{mouse.y}</p>
+        )
+      }}/>
+    )
+  }
+}
+```
+
+
++ 演示 Mouse 组件的复用  
++ 状态：鼠标坐标（x,y）
++ 操作状态方法：鼠标移动的事件
++ 传入render prop ：使用复用的状态来渲染ui的结构
+
+
+```js
+class App extends React.Conponent{
+  render(){
+    return(
+      <div>
+      <h1>render porps 模式</h1>
+      <Mouse render={(mouse)=>{
+        return(
+          <p>鼠标位置：{mouse.x},{mouse.y}</p>
+        )
+      }}/>
+
+      {
+        // 如果图片位置是变量的话  import 引入  下面  src 为  {变量}
+        // 猫捉老鼠鼠标控件
+        <Mouse render={(mouse)=>{
+        return(
+          <img 
+          src="图标位置"
+          alt="猫"
+          seyle={{
+            postition:'absolute',
+            top:mouse.y,
+            left:mouse.x,
+          }}
+          ></img>
+        )
+      }}/>
+      }
+    
+      </div>
+      
+    )
+  }
+}
+```
+###### 使用children 代替 render 属性
++ 注意：并不是这个模式叫做render props 就必须使用名为 render 的props 实际上可以使用 任意名称的prop
++ 吧prop 是一个函数并且告诉组件 要渲染什么内容的技术叫做 render props模式
++ 推荐使用children 代替 render 属性
+
+
+  
+```js
+// 方法简述
+<Mouse>
+   {({x,y})=><p>鼠标的位置是{x},{y}</p>}
+</Mouse>
+// 组件内部 
+this.props.children(this.state)
+
+
+// Context 中的用法：
+<Consumer>
+  {data=><span>data参数表示接收的数据 -- {data} </span>}
+</Consumer>
+
+```
+
+
+```js
+// 组件实例
+class Mouse extends React.Conponent{
+  state={
+    // 鼠标位置的状态
+    x:0,
+    y:0,
+  }
+  handleMouseMove = e =>{
+    this.setState({
+      //  拿到鼠标位置
+      x : e.clientX,
+      Y : e.clientY,
+    })
+  }
+  // 监听鼠标移动的代码   生命周期钩子函数
+  componentDidMount(){
+    window.addEvebtListener('mousermove',this.handleMouseMove)
+  }
+
+  Render(){
+    // 没有渲染组件代码 想要数据自己渲染就行了
+
+    // 改造children
+    // return this.props.render(this.state)
+    // 改造后
+    return this.props.children(this.state)
+
+
+  }
+}
+// 把render 改造成 children
+class App extends React.Conponent{
+  render(){
+    return(
+      <div>
+      <h1>render porps 模式</h1>
+
+      
+      {
+      // 改造第一个 render
+      // <Mouse render={(mouse)=>{
+      //   return(
+      //     <p>鼠标位置：{mouse.x},{mouse.y}</p>
+      //   )
+      // }}/>
+      }
+     
+
+      <Mouse>
+      {
+        // 改造后的  使用children
+        mouse =>{
+          return(
+           <p>鼠标位置：{mouse.x},{mouse.y}</p>
+          )
+        }
+      } 
+       </Mouse> 
+
+
+
+
+
+
+      {
+        // 改造children 前
+        // 如果图片位置是变量的话  import 引入  下面  src 为  {变量}
+        // 猫捉老鼠鼠标控件
+        /*
+        <Mouse render={(mouse)=>{
+        return(
+          <img 
+          src="图标位置"
+          alt="猫"
+          seyle={{
+            postition:'absolute',
+            top:mouse.y,
+            left:mouse.x,
+          }}
+          ></img>
+        )
+      }}//>
+      */
+      }
+    
+      {     
+        // 改造children 后
+        // 如果图片位置是变量的话  import 引入  下面  src 为  {变量}
+        // 猫捉老鼠鼠标控件
+        <Mouse> {
+              mouse=>( 
+                    <img
+                     src="图标位置"
+                     alt="猫"
+                     style={{
+                       postition:'absolute',
+                       top:mouse.y,
+                       left:mouse.x,}}
+                    />)         
+        }
+        </Mouse> 
+      }
+      </div>
+      
+    )
+  }
+}
+```
+
+
+
++ 代码优化
+   + 推荐：给render props 模式添加props校验
+```js
+   // 导入校验  prop 
+   Mouse.propType={
+     children:PropTypes.func.isRequired 
+   }
+```
+
+   + 应该在组件卸载的时候解除 mousemove 事件绑定
+```js
+   // 解除事件绑定  组件卸载的时候解除
+    window.removeEventListener('mousermove',this.handleMouseMove)
+```
+  
+```js
+
+
+// 组件实例
+class Mouse extends React.Conponent{
+  state={
+    // 鼠标位置的状态
+    x:0,
+    y:0,
+  }
+  handleMouseMove = e =>{
+    this.setState({
+      //  拿到鼠标位置
+      x : e.clientX,
+      Y : e.clientY,
+    })
+  }
+  // 监听鼠标移动的代码   生命周期钩子函数
+  componentDidMount(){
+    window.addEvebtListener('mousermove',this.handleMouseMove)
+  }
+  // 模块卸载的时候的钩子函数  生命周期钩子函数
+  componentWillUmount(){
+    // 解除事件绑定  组件卸载的时候解除
+    window.removeEventListener('mousermove',this.handleMouseMove)
+  }
+  Render(){
+    return this.props.children(this.state)
+  }
+}
+// 导入校验  prop 
+Mouse.propType={
+  children:PropTypes.func.isRequired
+}
+// 把render 改造成 children
+class App extends React.Conponent{
+  render(){
+    return(
+      <div>
+      <h1>render porps 模式</h1>
+      <Mouse>
+      {
+        // 改造后的  使用children
+        mouse =>{
+          return(
+           <p>鼠标位置：{mouse.x},{mouse.y}</p>
+          )
+        }
+      } 
+       </Mouse> 
+      {     
+ 
+        <Mouse> {
+              mouse=>( 
+                    <img
+                     src="图标位置"
+                     alt="猫"
+                     style={{
+                       postition:'absolute',
+                       top:mouse.y,
+                       left:mouse.x,}}
+                    />)         
+        }
+        </Mouse> 
+      }
+      </div>
+    )
+  }
+}
+```
+
