@@ -1356,7 +1356,7 @@ class App extends React.Conponent{
 ###### 使用children 代替 render 属性
 + 注意：并不是这个模式叫做render props 就必须使用名为 render 的props 实际上可以使用 任意名称的prop
 + 吧prop 是一个函数并且告诉组件 要渲染什么内容的技术叫做 render props模式
-+ 推荐使用children 代替 render 属性
++ 推荐使用  children 代替 render 属性
 
 
   
@@ -1575,3 +1575,20 @@ class App extends React.Conponent{
 }
 ```
 
+###### 高阶组件
++ 目的：实现逻辑状态复用
++ 采用包装（装饰）模式，比如说手机壳
+###### 思路分析
++ 高阶组件（HOC，Higher-OrderComputer）是一个函数，接收要包装的组件，返回增强后的组件
+```js
+const EnhancedComponent = withHoc（WrappedComponent）
+```
++ 在高阶组件内部创建一个类组件，在这个类组件中提供了复用的逻辑代码，通过props将复用的状态传递给被包装的组件WrappedComponent
+
+```js
+class Mouse extends React.Component{
+  render(){
+    return <WrappenCompoment {...this.state}>
+  }
+}
+```
