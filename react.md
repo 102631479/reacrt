@@ -1575,10 +1575,10 @@ class App extends React.Conponent{
 }
 ```
 
-###### 高阶组件
+#### 高阶组件
 + 目的：实现逻辑状态复用
 + 采用包装（装饰）模式，比如说手机壳
-###### 思路分析
+##### 思路分析
 + 高阶组件（HOC，Higher-OrderComputer）是一个函数，接收要包装的组件，返回增强后的组件
 ```js
 const EnhancedComponent = withHoc（WrappedComponent）
@@ -1592,3 +1592,284 @@ class Mouse extends React.Component{
   }
 }
 ```
+
+**使用步骤**
+
+1. 创建一个函数，名称预定以With 开头
+2. 指定函数参数，参数应该以大写字母开头（作为渲染的组件）
+3. 在函数内部创建一个类组件，提供复用的状态逻辑代码，并返回
+4. 再该组件中，渲染参数的组件，同时将状态通过prop传递给参数组件
+5. 调用该高阶组件，传入要增强的组件的，通过返回值拿到增强的组件，并将其渲染到页面中
+
+```js
+function withMouse(WrappedComponent){
+    class Mouse extends React.Component{}
+    return Mouse
+}
+
+// Mouse组件的render方法中：
+    return <WrappenCompoment {...this.state}>
+
+```
+```js
+// 实际例子
+
+// 创建高阶组件
+ function withMouse(WrappedComponent){
+  //  该组件提供复用的状态逻辑
+    class Mouse extends React.Component{
+      // 鼠标状态
+      state={
+        x:0,
+        y:0
+      }
+      handleMouseMove = e =>{
+
+        this.setState({
+          x:e.clientX,
+          y:e.clientY
+        })
+      }
+      // 钩子函数
+      componentDidMount(){
+        window.addEvenListener("mousemove",this.handleMouseMove)
+      }
+
+      componentWillUnmount(){
+        window.removeEventListener("mousemove",this.handleMouseMove)
+      }
+ 
+      render(){
+        return <WrappedComponent {...this.state}></WrappedComponent>
+      }
+      
+    }
+    return Mouse
+}
+
+
+const Position =props =>(
+    <p> 鼠标当前位置：（x:{props.x},y:{props.y}）</p>
+)
+
+const MousePosition =WithMouse(Posriton)
+
+// 猫捉老鼠组件
+const Cat = props =>(
+  <img src={img} alt="" style={{
+     position:"absolute",
+     top:props.y,
+     left:props.x,
+  }}/>
+)
+
+// 调用自己的高阶组件来增猫捉老鼠的组件
+const MouseCat =WithMouse(Cat)
+
+class App extends React.Component{
+  render(){
+    return(
+      <div>
+        <h1>高阶组件</h1>
+         {/* 渲染后的增强组件 */}
+         <MousePosition />
+         <MouseCat/>
+      </div>
+    )
+  }
+}
+
+```
+
+##### 设置 displayName 
+1. ***使用高阶组件存在的问题：得到的两个组件名称相同 ****
+2. 原因：默认情况下.React 使用组价名称作为 displayName
+3. 解决方法：为高阶组件设置 displayName 便于协调时区不同的组件
+4. displayName 的作用：用于设置调试信息（React Developer Tools信息）
+5. 设置方式
+
+
+
+```js
+
+
+Mouse.displayName = `WithMouse${getDisplayName(WrappedComponent)}`
+
+function getDisplayName(WrappedComponent){
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component'
+}
+```
+```js
+// 实际例子
+
+// 创建高阶组件
+ function withMouse(WrappedComponent){
+  //  该组件提供复用的状态逻辑
+    class Mouse extends React.Component{
+      // 鼠标状态
+      state={
+        x:0,
+        y:0
+      }
+      handleMouseMove = e =>{
+
+        this.setState({
+          x:e.clientX,
+          y:e.clientY
+        })
+      }
+      // 钩子函数
+      componentDidMount(){
+        window.addEvenListener("mousemove",this.handleMouseMove)
+      }
+
+      componentWillUnmount(){
+        window.removeEventListener("mousemove",this.handleMouseMove)
+      }
+ 
+      render(){
+        return <WrappedComponent {...this.state}></WrappedComponent>
+      }
+      
+    }
+    // 设置 displayName
+    Mouse.displayName = `WithMouse${getDisplayName(WrappedComponent)}`
+
+    return Mouse
+}
+
+function getDisplayName(WrappedComponent){
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component'
+}
+
+const Position =props =>(
+    <p> 鼠标当前位置：（x:{props.x},y:{props.y}）</p>
+)
+
+const MousePosition =WithMouse(Posriton)
+
+// 猫捉老鼠组件
+const Cat = props =>(
+  <img src={img} alt="" style={{
+     position:"absolute",
+     top:props.y,
+     left:props.x,
+  }}/>
+)
+
+// 调用自己的高阶组件来增猫捉老鼠的组件
+const MouseCat =WithMouse(Cat)
+
+class App extends React.Component{
+  render(){
+    return(
+      <div>
+        <h1>高阶组件</h1>
+         {/* 渲染后的增强组件 */}
+         <MousePosition />
+         <MouseCat/>
+      </div>
+    )
+  }
+}
+
+```
+
+##### 传递props
+
+1. 问题： props丢失  
+2. 原因： 高阶组件没有往下传递props
+3. 解决方式: 渲染 WrappedComponent 时， 将state 和 this.porps 一起传递个组件 
+4. 传递方式
+
+```js
+<WrappedComponent {...this.state} {...this.props} />
+```
+```js
+//  最终例子
+// 实际例子
+
+// 创建高阶组件
+ function withMouse(WrappedComponent){
+  //  该组件提供复用的状态逻辑
+    class Mouse extends React.Component{
+      // 鼠标状态
+      state={
+        x:0,
+        y:0
+      }
+      handleMouseMove = e =>{
+
+        this.setState({
+          x:e.clientX,
+          y:e.clientY
+        })
+      }
+      // 钩子函数
+      componentDidMount(){
+        window.addEvenListener("mousemove",this.handleMouseMove)
+      }
+
+      componentWillUnmount(){
+        window.removeEventListener("mousemove",this.handleMouseMove)
+      }
+ 
+      render(){
+        //         <WrappedComponent {...this.state} {...this.props} /> 传递 porps  解决没有传递props问题
+                                
+        return  <WrappedComponent {...this.state} {...this.props} />
+      }
+      
+    }
+    // 设置 displayName
+    Mouse.displayName = `WithMouse${getDisplayName(WrappedComponent)}`
+
+    return Mouse
+}
+
+function getDisplayName(WrappedComponent){
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component'
+}
+
+const Position =props =>(
+    <p> 鼠标当前位置：（x:{props.x},y:{props.y}）</p>
+)
+
+const MousePosition =WithMouse(Posriton)
+
+// 猫捉老鼠组件
+const Cat = props =>(
+  <img src={img} alt="" style={{
+     position:"absolute",
+     top:props.y,
+     left:props.x,
+  }}/>
+)
+
+// 调用自己的高阶组件来增猫捉老鼠的组件
+const MouseCat =WithMouse(Cat)
+
+class App extends React.Component{
+  render(){
+    return(
+      <div>
+        <h1>高阶组件</h1>
+         {/* 渲染后的增强组件 */}
+         <MousePosition />
+         <MouseCat/>
+      </div>
+    )
+  }
+}
+
+
+```
+**总结**
+### React 组件进阶
+1. 组件通讯是构建React 应用必不可少的一环。
+2. props 灵活性让组件变得更强大 
+3. 兄弟组价解决方式   状态提升React 组件的常用模式
+4. 组件的生命周期有助于理解组价运行的过程
+5. 钩子函数让开发者在特定的时机执行某些功能
+6. render props 模式和高阶组件都可以实现组件状态逻辑复用
+7. 组件的极简模型 （state,props）=>UI   
