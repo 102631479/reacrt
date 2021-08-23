@@ -282,4 +282,63 @@ this.setState(()=>{
         obj:new Obj
     }
 })
-````
+```
+
+## 虚拟Dom 和diff 算法
++ React 更新视图的思想是：只要state变化就会重新渲染视图
++ 特点：思路很清晰
++ 问题：当只有一个dom元素需要更新的时候，也非要把整个组件的内容重新渲染到页面中？ 答：不是
++ 理想状态：React是如何做到部分更新的？   虚拟Dom 和diff 算法
+  
++ 虚拟dom:本质上就是一个js对象，用来描述你希望在屏幕上看到的内容
+
+```js
+// 虚拟dom对象
+const element = {
+    type:"h1",
+    props:{
+        className:"greenting",
+        children:"Hello jsx"
+    }
+}
+  
+```
+执行过程
+1. 初次渲染时候，React会根据初始State(Modle),创建一个虚拟Dom对象（树）。
+2. 根据虚拟dom 生成真正的dom,渲染到页面中。
+3. 当数据变化后（setState()）,重新根据新的数据，创建新的虚拟don对象树
+4. 与上一次得到的虚拟Dom对象，使用Diff 算法对比（找不同）， 得到更新的内容
+5. 最终， React 只将变化的内容更新（Patch） 到Dom ，重新渲染到页面
+
+
+Model  ---->  virtual Dom  ----> Render
+
+
+> 代码演示
++ 组件 Render()调用后，根据状态和JSX结构商城Dom对象
++ Render（）方法的调用 并不意味着浏览器中重新渲染 
++ Render（）方法调用会 使用 diff 算法 更新需要更新的内容
+
+```js
+{
+    type : "div",
+    props:{
+       children : [
+          {type: 'h1'  , props : {children : "随机数"}} 
+          {type: 'p'  , props : {children : "0"}} 
+       ]
+    }
+}
+```
+
+> React 原理揭秘
+1. 应用第一  原理第二  
+2. 清楚原理有助于更好的理解 React 的自身运行机制
+3. setState()异步更新数据
+4. 父组件更新会导致子组件更新，纯组件提升性能
+5. 思路清晰简单为前提 虚拟Dom 和Diff 保效率
+6. 虚拟dom -> state + JSX
+7. 虚拟Dom 的真正的价值从来不是性能     而是脱离浏览器跨平台去运行
+
+
+

@@ -15,6 +15,7 @@ import {
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 moment.locale('zh-cn');
+// 暂时不用
 class SiderDemo extends React.Component {
     state = {
         collapsed: false,
