@@ -8,7 +8,7 @@
    // create-react-app my-app  创建react 项目
    // npm start  启动项目
    // reacrt-dom 负责渲染dom
-  ```  
+  ```
 # jsx 的基本使用
 
 1.React的属性名字是驼峰命名法
@@ -626,7 +626,7 @@ console.log(this.txtRef.current.value)
        {id:3,text:"我是第3"},
     }]
   },
-  ```
+```
   ```js
   renderList = () =>{
       // 条件渲染语句
@@ -710,7 +710,7 @@ console.log(this.txtRef.current.value)
   }
  }
 
-```
+  ```
 
 
 # React组件进阶
@@ -873,7 +873,7 @@ RenderDOM.render(<Prent/>,document.get.......)
   1. 父组件提供一个回调函数（用于接收数据）
   2. 子组件通过props调用回调函数
   3. 将子组件的数据通过数据传递给回调函数
-    
+
 ```js
 class Prent extends React.Component {
   getChildMsg=(msg)=>{
@@ -1234,7 +1234,7 @@ class Counter extends React.Conponent{
 
 
 #### React组件复用的概述
-  
+
 + 思考：如果两个组件中的部分功能相同，该如何处理。
 + 处理方式：复用相似的功能（联想函数的封装）
 + 复用什么？1. state 2. 操作state的方法（组件状态逻辑）
@@ -1359,7 +1359,7 @@ class App extends React.Conponent{
 + 推荐使用  children 代替 render 属性
 
 
-  
+
 ```js
 // 方法简述
 <Mouse>
@@ -1503,7 +1503,7 @@ class App extends React.Conponent{
    // 解除事件绑定  组件卸载的时候解除
     window.removeEventListener('mousermove',this.handleMouseMove)
 ```
-  
+
 ```js
 
 
