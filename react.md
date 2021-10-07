@@ -29,7 +29,6 @@ const dv=(
 ## 在jsx中嵌入javaScript 表达式
 
 + 数据嵌入表达式子   单括号  
-  
 ```js
   import React from 'react';
   import ReactDOM from 'react-don';
@@ -108,7 +107,6 @@ import './css/style.css';
 + 使用jsx配合嵌入式的js表达式，条件渲染，列表渲染，可以描述任意ui的结构
 + 使用className的方式给jsx的添加样式
 + React完全利用js语言的自身的能力来编写ui,而不是造轮子增强html的功能 
-  
 
 # React组件介绍
 + 组件是React的一等公民，使用React就是在用组件
@@ -223,7 +221,6 @@ class App extends React.Compoent{
 
 * 比如计数器的案例中 点击让数值从0到1 0和1就是不同的状态，而从0到1 就表示状态发生了改变
 * 状态变化后 ui也随之更新React 想要完成这个操作就要有状态组件来完成这个
-  
 
 ### state 和 setState的使用
 
@@ -231,7 +228,6 @@ class App extends React.Compoent{
 
 + 状态是私有的 只能从内部获取
 + 状态就是数组
-  
 ```js
 //  语法形式一
 class App extends React.Component{
@@ -292,7 +288,6 @@ class App extends React.Component{
 #### 从jsx中抽离事件处理程序
 + jsx中掺杂过多的js代码会特别混乱
 + 推荐：将逻辑代码抽离到单独的方法中去 ，保证jsx清晰
-  
 ```js
   class App extends React.Component{
     state={
@@ -844,7 +839,6 @@ class Hello extents React.Component{
 + 父组件提供要传递的state 的数据
 + 给子组件标签添加属性，值为state中的数据
 + 子组件中通过props 接收父组件传递的值
-  
 ```js
 class Prent extends React.Component {
    state={
@@ -966,7 +960,6 @@ class Prent extends React.Component {
 >思考:App组件要传递数据给Child组件，应该如何处理
 + 更好的姿势使用：Context
 + 作用：跨组件传递数据（比如：主题 ，语言等）
-  
 - 使用步骤 
 1. 调用React.createContext()创建 Provider（提供数据）和 Consumer(消费数据) 两个组件
 ```js
@@ -1081,7 +1074,6 @@ App.propTypes={
 2. React元素类型 element
 3. 必填项：isRequired
 4. 特定结构的对象：shape({})
-   
 
 ```js
 //  常见类型
@@ -1115,7 +1107,6 @@ App.defaultProps={
 + 声明周期的每个阶段伴随着调用的一些方法，这些方法就是声明周期的钩子函数
 + 为开发人员在不同的阶段操作提供了时机
 + 只有类组件才有生命周期
-  
 
 #### 生命周期的三个阶段  
 学习思路：
@@ -1872,4 +1863,4 @@ class App extends React.Component{
 4. 组件的生命周期有助于理解组价运行的过程
 5. 钩子函数让开发者在特定的时机执行某些功能
 6. render props 模式和高阶组件都可以实现组件状态逻辑复用
-7. 组件的极简模型 （state,props）=>UI   
+7. 组件的极简模型 （state,props）=>UI    
