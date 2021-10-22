@@ -342,3 +342,153 @@ Model  ---->  virtual Dom  ----> Render
 
 
 
+
+
+# Fragment 
++ 通过减少节点来达到优化前端目的  
+```js
+import React, { Component , Fragment } from 'react';
+// 使用Fragment来减少react打包以后不必要的节点保留   减少dom
+// 完整语法
+class FragmentView extends Component{
+    render(){
+        return (
+             <Fragment>
+                 <li>基础</li>
+                 <li>语法</li>
+             </Fragment>
+        )
+    }
+}
+export default FragmentView;
+// 短语法
+class FragmentView extends Component{
+    render(){
+        return (
+             <>
+                 <li>基础</li>
+                 <li>语法</li>
+             </>
+        )
+    }
+}
+export default FragmentView;
+
+```
+## 带key的Fragment
++ 显示 <React.Fragment>语法声明片段需要key
+```js
+import React, { Component } from 'react';
+const list =[
+    {id:1,title:"第一"},
+    {id:2,title:"第二"},
+    {id:3,title:"第三"},
+]
+class FragmentView extends Component{
+    render(){
+        return return list.map(item=>{
+            return (<React.Fragment key={item.id}><li>{item.title}</li></React.Fragment>)
+        })
+    }
+}
+export default FragmentView;
+```
+
+# dangerouslySetlnnerHTML  
++ dangerouslySetlnnerHTML是React为浏览器Dom提供innerHTML 的替换方案。通过富文本编辑器进行操作后的内容，会保留标签形式，并不能正确显示
+```js
+// 直接显示
+class dsHTML extends Component{
+    render(){
+        return 
+        <div>
+           <div
+            dangerouslySetlnnerHTML={{
+               _html:`<li>innerHTML</li>`
+              }}
+             ></div>
+       </div>
+        )
+    }
+}
+export default dsHTML;
+```
+
+# context 
++ context提供了一个无需为每层组件手动添加props,就能在组件树之间进行数据传递的方法 
+
+```js
+// 提供者
+import React, { Component,createContext } from 'react';
+const {Consumer,Provider}=createContext()
+class ProviderView extends Component{
+     state={
+         number:100
+     }
+    add(){
+      this.setState(()=>{
+          return{
+              number:state.number + 1
+          }
+      })
+    }
+    render(){
+        return (
+             < Provider value={{
+                 number:this.state.number
+                 add:this.state.bind(this)
+             }}>
+             {this.props.Children}
+             </ Provider>
+        )
+           
+        
+    }
+}
+export {ProviderView,Consumer} 
+
+```
+```js
+// 消费者
+import React, { Component } from 'react';
+import{ProviderView,Consumer}from './ProviderView'  //上面上个页面函数
+
+class ContextView extends Component {
+    render(){
+        return( 
+            <ProviderView>
+               <Consumer
+               {
+                 (args)=>{
+                      return <div>{args.number}
+                      <button onClick={arg.add}></button>
+                      </div>
+                  }
+                }
+                 >
+               </Consumer>
+            </ProviderView>
+        )
+    }
+}
+export default ContextView;
+
+
+
+// 引入页面显示
+import React, { Component } from 'react';
+import myView from './views/context/ContextView'  //上面上个页面函数
+class ContextView extends Component {
+    render(){
+        return( 
+          <div>
+             <h1>代码练习</h1>
+             <ul>
+                <myView></myView>
+             </ul>
+          </div>
+        )
+    }
+}
+
+```

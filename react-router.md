@@ -139,7 +139,7 @@ export default App;
 + push(path):跳转到某个页面，参数path表示跳转的路径
 ```js
 class Login extends Component {
-    handleLogin = （） =>{
+    handleLogin = () =>{
         this.props.history.push("/home")
     }
     render(){...}
