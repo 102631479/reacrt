@@ -492,3 +492,73 @@ class ContextView extends Component {
 }
 
 ```
+
+
+
+# redux
++ react 是redux的官方绑定的库，具有高效灵活的特性，他能够使你的react 组件从Reduxstore中读取数据，并且向store 分发actions以更新数据 
++ action 数把数据从应用传到stroe的有效载荷，他是store数据的唯一来源
++ stroe
+
++ 第一步安装 npm install -- save react-redux
++ reducers指定了应用状态的变化如何响应actions并发送store的
++ 创建文件夹，在文件夹里面创建 reducer.js文件
++ 创建defaultStore储存共有数据
+
+```js
+const defaultStore={
+    age:18,
+    name:'小刘'
+}
+```
++ 处理数据
++ state:只读的，使用纯函数来执行修改。
++ action ：接受组件派发过来的方法
+
++ Provider
+   + Providerstore 使用层级中的 connect() 方法都能获得 Reduxstore 正常情况下，你的组件应该是嵌套在Provider才可以使用connect()方法。store(Reduxstore):应用程序中唯一Reduxstore对象
+```js
+// 引入redux
+import { Provider } from 'react-redux';
+
+// 嵌套组件
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <h1>我是React</h1>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
++ connect
+   +  React-redux提供一个connect方法能够让你吧组件和store连接起来
+   +  语法  connect(mapStateToProps, mapDispatchToProps)
+
+```js
+/* mapStateToProps如果定义该函数，组件将会监听Reduxstore的变化。任何时候Reduxstore发生变化 mapStateToProps函数将会被调用。该回调函数必须返回一个纯对象。这个对象会与组件props合并。如果你省略了这个函数，你的组件将不会监听Reduxstore
+*/
+const mapStateToProps = (state) => (
+  {
+    name: state.name,
+    age: state.age
+  }
+)
+
+
+/*
+mapDispatchToProps 是connect的第二个参数，用来建立ui组件的参数到store.dispach方法的映射。它定义了哪些用户的操作应该当做Action 传给Store
+*/
+const mapDispatchToProps = (dispatch) => ({
+  changeAge() {
+    const action = {
+      type: 'change',
+      age: 100
+    }
+    dispatch(action)
+  }
+})
+```
+# redux优化
+
