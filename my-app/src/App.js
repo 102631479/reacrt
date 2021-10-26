@@ -19,16 +19,18 @@ class App extends Component {
     );
   }
 }
+
+
 const mapStateToProps = (state) => (
   {
-    name: state.name,
-    age: state.age
+    name: state.user.name,
+    age: state.user.age
   }
 )
 const mapDispatchToProps = (dispatch) => ({
   changeAge() {
     const action = {
-      type: 'change',
+      type: 'change_age',
       age: 100
     }
     dispatch(action)

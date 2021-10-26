@@ -562,3 +562,99 @@ const mapDispatchToProps = (dispatch) => ({
 ```
 # redux优化
 
++ combineReducers介绍
+   + 多个redux的文件联合到一起使用
+
++ 第一个 redux
+
+```js
+const defaultState = {
+    title: '我是标题',
+    list: [
+        { name: "张三", age: 19 },
+        { name: "张思", age: 20 },
+
+    ]
+}
+
+const goodsReducer = (state = defaultState, action) => {
+    // 获得类型
+    let type = action.type
+    const newState = JSON.parse(JSON.stringify(state))
+    switch (type) {
+        case "change_title":
+            newState.title = action.title
+            return newState
+        default:
+            return state
+    }
+
+}
+export default goodsReducer
+```
++ 第二个 redux
+
+```js
+const defaultState = {
+    name: '李白',
+    age: 30
+}
+
+
+const userReducer = (state = defaultState, action) => {
+    // 获得类型
+    let type = action.type
+    const newState = JSON.parse(JSON.stringify(state))
+    switch (type) {
+        case "change_name":
+            newState.name = action.name
+            return newState
+        case "change_age":
+            newState.age = action.age
+            return newState
+        default:
+            return state
+    }
+
+}
+export default userReducer
+```
+
+
+```js
+// reducer.js
+import { combineReducers } from "redux"
+
+import goods from './goods/goodsReducer'
+import user from './user/userReducer'
+
+export default combineReducers({
+    user: user,
+    goods: goods
+})
+
+
+```
+
+```js
+// store.js
+//  基本所有项目都是这样 不用改变
+
+import { createStore, applyMiddleware } from "redux";
+
+import reducer from './reducer'
+
+import thunk from "redux-thunk"
+
+const state = createStore(reducer, applyMiddleware(thunk))
+
+export default state
+
+```
+
+
+
+# hook
++ 组件复用状态逻辑很难 
+   + React没有提供可复用性行为的附加到组件的途径，React需要为共享状态逻辑提供更好的途径
+   + 你可以使用Hook从组件中提取逻辑状态，使得在组件间或者社区内共享Hook变得简洁
