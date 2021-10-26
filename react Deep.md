@@ -658,3 +658,115 @@ export default state
 + 组件复用状态逻辑很难 
    + React没有提供可复用性行为的附加到组件的途径，React需要为共享状态逻辑提供更好的途径
    + 你可以使用Hook从组件中提取逻辑状态，使得在组件间或者社区内共享Hook变得简洁
+
++ 复杂的组件难以理解
+   + 我们经常维护一些组件，组件期初很简单，但是逐渐被状态逻辑和副作用充斥，每个声明周期包含一些不相关的逻辑，相互关联且需要对照修改的代码被进行拆分，而完全不相关的的代码却在同一个方法组合在一起  容易产生bug 并且逻辑不一致
+   +  在多数情况下，不可能将组建拆分成更小的粒度，因为状态逻辑无处不在，这也给测试带来了一定的跨越，同时这也是很多人将React与状态管理库结合在一起是使用的原因。但是，这往往会引入更多抽象的概念，需要在不同的文件之间来回切换，是的复用变得更加困难。
+   +  为了解决这个问题，hook 将组建中先相关的部分拆分成很小的函数（比如设置订阅 或者请求数据），而且强制按照生命周期进行划分 你可以使用reducer 来管理组件内部的状态，使得更加可预测
+
++ 用更少的代码实现同样的效果
+   + es6.class => hook
+   + state，setSstate  => useState
+   + componentDidMount ,componentDidUpdate, componentWillUnmount  => useEffect
+
+## state Hook
+
+```js
+import React, { useState } from 'react'
+
+const HookTest = () => {
+    const [number, setNumber] = useState(0)
+    return (
+        <div>
+            <h1>我是Hook测试({number})</h1>
+            <button onClick={() => {
+                setNumber(number + 1)
+            }}>hookTest数据加一 </button>
+        </div>
+    )
+
+}
+export default HookTest
+```
+
+## Effect Hook
++ Effect Hook可以让你在函数中执行副作用的操作
++ React 组件中执行过数据获取，订阅或者手动修改过DOM。我们统一把这些操作称之为副作用，或者简称为作用 
+```JS
+import React, { useRef } from 'react'
+
+const HookReftest = () => {
+    const inputRef = useRef()
+    //  返回一个可变的ref对象，其 current 属性被初始化为传入的参数(initialValue) .返回ref 对象在组件生命周期内部爆出不变
+    const handClick = (e) => {
+        console.log(inputRef.current.value, "输入框里面的数据");
+        alert("输入框里面的数据" + inputRef.current.value)
+    }
+
+    return (
+        <div>
+            <h1>我是hookRef测试</h1>
+            <input type="text" name="" id="" ref={inputRef} />
+            <button onClick={handClick}>获得数据inputRef</button>
+        </div>
+    )
+}
+export default HookReftest
+```
+
+
++ Hook contest
+
+```js
+import React, { useContext } from 'react'
+import { Text } from './Provider'
+
+//子组件
+const Cusetomer = () => {
+    const { number, setNumber } = useContext(Text)
+
+    return (
+        <div>
+            <h1>子组件的number={number}</h1>
+            <button onClick={
+                () => {
+                    setNumber(number + 1)
+                }
+            }>子组件改变</button>
+        </div>
+    )
+}
+export default Cusetomer
+```
+
+```js
+
+
+import { createContext, useState } from 'react'
+import Cusetomer from './Cusetomer'
+
+// 作为容器出现  主要是传递数据
+export const Text = createContext()
+const Provider = () => {
+    const [number, setNumber] = useState(0)
+    return (
+        <div>
+            <h1>当前父组件的Number{number}</h1>
+            <button onClick={
+
+                () => {
+                    setNumber(number + 1)
+                }
+
+            }>改变number</button>
+
+            <Text.Provider value={{ number, setNumber }}>
+                <Cusetomer />
+            </Text.Provider>
+        </div>
+    )
+}
+
+
+export default Provider
+```
