@@ -770,3 +770,42 @@ const Provider = () => {
 
 export default Provider
 ```
+
+
+
+# 高阶组件
++ 高价函数回顾 
+  + js函数其实指向某个变量，既然变量可以指向函数，函数的的参数能接受变量，那么就是一个函数可以接收另外一个函数作为变量，这种函数称之为高阶函数
+
+```js
+let call= ()=>{
+    console.log('11')
+}
+setInterval (call.500)
+```
+
+# 高阶组件
++ 高阶组件(hoc) 是react中 用于重用组件逻辑的高级技术。Hoc本身不是React的一部分。他们是从React 构思本质中浮现出来的一种模式  
+
++ 具体来说，高阶函数是一个函数，能够接受一个组件并返回一个新的组件，简单来说一个高阶组件只是一个包装另外一个React 组件的React组件
+
+```js
+//  高阶函数
+let Hello = () => {
+    console.log('你好');
+}
+let hoc = (fn) => {
+    return () => {
+        console.log(111);
+        fn()
+        console.log(222);
+    }
+}
+let call = hoc(Hello)
+
+call()
+```
+
++ 高阶组件属性代理
+  + style-component
+    + 他是通过css
