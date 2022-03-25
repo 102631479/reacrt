@@ -18,8 +18,11 @@
 4.推荐使用小括号包括jsx ，从而避免js的自动插入分号陷阱
 ```js
 // 首先引入 
+
 import React from 'react';
+
 import ReactDOM from 'react-don';
+
 const dv=(
     <div>Hello JSX</div>
 )
@@ -648,8 +651,7 @@ console.log(this.txtRef.current.value)
   },
   addCommit=()=>{
     const {comments,username,usercoment} = this.state
-   
-
+  
   //  输入空的字符串的时候判断
     if(username.trim()===''|| usercoment.trim()===''){
       alert("请输入评论内容")
