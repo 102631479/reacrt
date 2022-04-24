@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Input, Modal, Form } from 'antd';
 
 class EditDialog extends Component {
+
     state = {
         form: this.props.form
     }
+    
     render() {
         return (
             this.props.visible && <Modal
@@ -24,6 +26,7 @@ class EditDialog extends Component {
             </Modal>
         )
     }
+
     handleChange(param, e) {
         const form = {...this.state.form};
         form[param] = e.target.value;
