@@ -501,7 +501,7 @@ class ContextView extends Component {
 + stroe
 
 + 第一步安装 npm install -- save react-redux
-+ reducers指定了应用状态的变化如何响应actions并发送store的
++ reducers 指定了应用状态的变化如何响应actions并发送store的
 + 创建文件夹，在文件夹里面创建 reducer.js文件
 + 创建defaultStore储存共有数据
 
