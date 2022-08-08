@@ -1,22 +1,27 @@
-## React第一天 React的初步
+ ## React第一天 React的初步
+
 #### 介绍
+
 - react是有facebook公司的前端开发团队进行开发和维护的一套js库
 - react一切皆组件，all in JS
 - react是用来构建web用户交互界面
 - react提供一套虚拟DOM(virtual dom),机制
 - react中facebook专为其提供一套语法糖---jsx
 
-#### 优点:
+#### 优点
+
 - 一切皆组件，在react中几乎全是使用组件进行开发
 - 速度快，react提供了虚拟dom机制,
-- 跨浏览器兼容，甚至在IE8中也可以使用 
+- 跨浏览器兼容，甚至在IE8中也可以使用
 - 单向数据流，适合开发复杂的项目，出了问题容易溯源
 
 #### 缺点
+
 - react本身不是一套完整的框架,react需要结合flux和redux等架构来实现完整的项目
 - react最多只能算mvc中的view
 
 #### react解决的痛点
+
 - 组件化: 在react中一切组件组件
 - 开发效率:react中使用组件化思想,使代码变得易于读懂和开发
 - 运行效率:react采用的是虚拟dom机制,相比于原生开发效率速度更高
@@ -24,14 +29,15 @@
 - 在用户体验方面:react采用SPA(单页面应用),使得用户体验更好.
 
 #### 下载安装
-  + 方式一
+
+- 方式一
 
 ```js
 <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 ```
 
-  + 方式二
+- 方式二
 
 ```js
 npm i create-react-app -g 全局安装工具链
@@ -44,6 +50,7 @@ npm start  开启项目
 node_modules/react-scripts/scripts/start.js
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 5000;
 ```
+
 #### 项目目录介绍
 
 ```js
@@ -62,15 +69,21 @@ my-app
      package.json   #安装node_modules中相关的依赖项
      READ.me        #项目解读文件
 ```
+
 #### JSX语法：JSX是对js的扩充，允许js和html混写
+
   1. 遇到 <>,JSX 就解析成 HTML;遇到 {}按 JavaScript 解析。
   2. 虚拟 DOM 只允许有一个根节点
   3. JSX 标签可以相互嵌套注意换行和缩进,增强代码的可读性
   4. 建议使用小括号括将 JSX 代码括起来 ,防止分号自动插入的 bug
-  5. 通过 JSX 语法将数据绑定到虚拟 DOM 对象(是一个js的object),再通过 render 将数据渲染到真实 DOM 
+  5. 通过 JSX 语法将数据绑定到虚拟 DOM 对象(是一个js的object),再通过 render 将数据渲染到真实 DOM
+
 #### 修改标签内容
-  内容可以有简单的运算，类似vue的文本插值 
+
+  内容可以有简单的运算，类似vue的文本插值
+
 #### 修改标签属性
+
   ``` html
     <img src={imgUrl} alt="" />
     <a href={url} >中公教育</a>
@@ -79,8 +92,10 @@ my-app
     {/* 在jsx的语法中，style的类型需要是对象，所以需要两个花括号。多个单词的属性名要写成：fontSize */}
     <div style={{ color: 'red', fontSize: '40px' }}>修改我的style</div>
   ```
+
 #### 条件渲染
-  ``` html
+
+``` html
     <div>条件渲染：简单的用三元表达式写，复杂的用if...else</div>
     <div>
       {
@@ -93,8 +108,10 @@ my-app
         })()
       }
     </div>
-  ```
+```
+
 #### 循环渲染
+
   ``` html
     <div>循环渲染，类似vue的v-for。使用map方法实现</div>
     <ul>
@@ -105,17 +122,24 @@ my-app
       }
     </ul>
   ```
+
 #### 组件
+
 函数组件和类组件的区别：1.比较熟悉function，不熟悉class，class功能更强大，function性能更好；2.class可以有this；3.class有生命周期钩子，函数组件没有；4.state的处理。函数组件适用于简单的静态页面展示。
+
 #### 事件绑定
-  + 两种绑定方式
+
+- 两种绑定方式
+
   ``` js
     <button onClick={(e) => this.showData('ES6', e)}>ES6-箭头函数</button>
     {/* 默认this是undefined，需要通过bind(this)绑定 */}
     <button onClick={this.showData.bind(this, 'ES5')}>ES5-普通函数</button>
     {/* <button onClick={this.showData}>ES5-普通函数</button> */}
   ```
-  + 传递参数
+
+- 传递参数
+
   ``` js
     {/* this指向当前组件,参数在e前面 */}
     <button onClick={(e) => this.showData('ES6', e)}>ES6-箭头函数</button>
@@ -123,17 +147,21 @@ my-app
     <button onClick={this.showData.bind(this, 'ES5')}>ES5-普通函数</button>
     {/* <button onClick={this.showData}>ES5-普通函数</button> */}
   ```
-  + 事件对象
+
+- 事件对象
     > 传递事件对象e之后，可以获取e相关的信息，例如e.target.value等
-    
-  + 阻止默认事件
+
+- 阻止默认事件
     > e.preventDefault();  (写return false不行)
-  + 阻止冒泡
+- 阻止冒泡
     > e.stopPropagation()
-  + 改为捕获的方式
+- 改为捕获的方式
     > 加上Capture这个关键字，例如：onClickCapture={(e)=>this.clickHandler1('big',e)}
+    >
 #### state 状态机：管理数据状态，可以初始化数据，类似vue中的data
+
   1. 初始化
+
   ``` js
     this.state = {
       age: 18,
@@ -141,8 +169,10 @@ my-app
       msg: ''
     }
   ```
+
   2. 获取状态:this.state.xxx
   3. 修改状态,这是一个异步的方式，想要获取最新的值，可以在回调函数中获取
+
   ``` js
     this.setState({
       money: this.state.money + 100
@@ -150,7 +180,9 @@ my-app
       console.log(this.state.money);
     })
   ```
+
   4. react版的双向绑定
+
   ``` js
     <input value={this.state.msg} onChange={(e)=>this.twoWayBind(e)} />
 
@@ -162,8 +194,11 @@ my-app
   ```
 
 ## React第二天 React组件、生命周期和性能优化
+
 #### props的使用
+
   在组件中通过this.props.xx获取，如果想在构造函数中使用props，需要传入参数
+
   ``` js
   constructor(props){
     // 调用super之后，才可以使用this
@@ -187,8 +222,11 @@ my-app
     )
   }
   ```
+
   通过props实现组件传值：
+
   1. 父传子：通过组件的属性传递
+
   ``` js
         // 在父组件中
         <ComC
@@ -208,8 +246,10 @@ my-app
           )
         }
   ```
+
       子组件不能修改父组件传过来的值，read only property，这是只读属性
     2. 子传父
+
   ``` js
     // 父组件传给子组件的函数，函数中包含了获取数据之后的操作
     fn(data) {
@@ -224,13 +264,19 @@ my-app
     // 在子组件中调用传过来的函数，函数的参数就是子传父的数据
     <button onClick={(e)=>this.props.fn(this.state.msg,e)}>子传父</button>
   ```
+
   state和props的区别：
+
   1. state: 是组件内部的状态数据,state的数据不能直接修改,如果需要修改需要通过特殊方法setState()进行修改.
   2. props:一般用于组件之间通信,并且通常是父组件向子组件传递数据,通过this.props来接收.this.props的数据不能直接修改,如果需要修改,则需要通过父组件中的setState来进行修改.
-  #### 生命周期
+
+#### 生命周期
+
   生命周期:指对象从创建,到销毁的过程,就是一个生命周期
   钩子函数:在某时某刻自动被调用的函数就是钩子函数
-  + 挂载期
+
+- 挂载期
+
     ``` js
     //构造函数. 作用: 在初始化时做state 数据的赋值工作
     constructor(props){
@@ -269,8 +315,11 @@ my-app
         console.log(document.querySelector('h1').innerHTML);
 
     }
+
   ```
-  + 更新期:当props或着state的数据发生改变的时候,处于更新期
+
+  - 更新期:当props或着state的数据发生改变的时候,处于更新期
+
   ``` js
     // getDerivedStateFromProps
     //应该更新组件吗?
@@ -292,17 +341,22 @@ my-app
         console.log(prevState);
     }
   ```
-  + 销毁期
+
+- 销毁期
+
   ``` js
   //销毁期
   componentWillUnmount(){
       console.log('==componentWillUnmount==');
   }
   ```
+
 #### 表单元素处理
+
   在react中没有提供表单的数据双向绑定,在html中input textarea select等等,自己本身有各自的状态,可进行随时修改.
   受控组件: 状态受react组件的控制
   非受控组件:状态不收react组件的控制
+
   ``` html
   <!-- 输入框 -->
   <input type="text" value={this.state.name} onChange={(e)=>this.setState({name:e.target.value})}  />
@@ -318,7 +372,9 @@ my-app
     <option value="company">公司</option>
   </select>
   ```
+
   多选框：
+
   ``` html
   <label>杭州</label>
   <input type="checkbox" name="city" value="hangzhou" checked={this.state.val3.includes("hangzhou")} onChange={this.changeVal3} />
@@ -341,7 +397,9 @@ my-app
     })
   }
   ```
+
   非受控组件
+
   ``` js
     render() {
       return (
@@ -360,7 +418,9 @@ my-app
         console.log(this.input.value);
     }
   ```
+
 #### ref属性：查找节点，DOM元素或者组件,类似vue的ref属性，用来直接操作dom，一般不用
+
 ``` js
   constructor(){
       super()
@@ -379,9 +439,13 @@ my-app
       this.input.current.innerHTML='XXX'
   }
 ```
+
 #### React的性能优化
+
 1.减少操作dom的次数 2.减少涉及到dom的数量
-+ React.Fragment
+
+- React.Fragment
+
 ```jsx
 import React, { Component } from 'react'
  
@@ -408,7 +472,7 @@ export default class Box1 extends Component {
  
 ```
 
-+ React.memo(无用的渲染)
+- React.memo(无用的渲染)
 
 ```jsx
 import React, { Component } from 'react'
@@ -452,14 +516,18 @@ export default class Box2 extends Component {
 }
  
 ```
-+ 纯组件
+
+- 纯组件
+
 ``` js
   export default class Child2Child extends PureComponent {
     code ...
     // 使用PureComponent之后，只有父组件传进来的值变化时，才会更新
   }
 ```
-+ 错误边界,避免某个组件报错后，整个项目不能运行
+
+- 错误边界,避免某个组件报错后，整个项目不能运行
+
 ``` jsx
 import React, { Component } from 'react'
 
@@ -497,7 +565,9 @@ export default class ErrorBoundary extends Component {
   <Error></Error>
 </ErrorBoundary>
 ```
+
 #### HOC高阶组件:HOC高级组件不是组件，是函数，这个函数的参数和返回值都是组件
+
 ``` jsx
   const Fn = (C) => {
   // 返回值也是一个组件
@@ -546,12 +616,17 @@ export default class Base extends Component {
   }
 }
 ```
+
 ## 第十八天 过渡动画、路由和UI
+
 #### 过渡动画
+
 1. 下载react-transition-group
+
 ```
 cnpm i react-transition-group --save
 ```
+
 2. CSSTransition实现单元素过渡动画
 (1) unmountOnExit:退出时实现卸载该组件，该属性必须添加
 (2) in:控制元素显示状态的 state 状态数据
@@ -598,6 +673,7 @@ export default class Box1 extends Component {
     }
 }
 ```
+
 3. TransitionGroup实现列表元素动画效果
 
 ```jsx
@@ -704,8 +780,10 @@ cnpm i react-router-dom --save
 
   </Switch>
 ```
+
 - HashRouter：带有#
 - BrowserRouter ：常用的方式，不带#
+
 3. 路由规则
 
 - Route
@@ -714,6 +792,7 @@ cnpm i react-router-dom --save
   component:访问的组件
   exact:精准匹配，不能用在父路由上
   strict:严格模式  需要结合exact属性一起使用才能有效。检查地址最后有没有斜线
+
 4. 404路由
 
 > 当用户访问一个不存在的路由时,就会显示一个默认的页面,404页面.
@@ -724,6 +803,7 @@ cnpm i react-router-dom --save
 {/* 404页面的处理，当用户输入了错误地址时，前面的路由都没有匹配成功，就会重定向到一个固定的页面 */}
 <Redirect to="/notfound"></Redirect>
 ```
+
 ```jsx
   <Route path="*" component={NotFound}></Route>
 ```
@@ -752,7 +832,8 @@ cnpm i react-router-dom --save
   - to:  必填项  to:要跳转的路由
 - 路由组件和非路由组件
   包裹在Route组件里的是路由组件，可以使用路由相关的熟悉和方法。没有包裹在Route组件里的是非路由组件，比如App这个组件。需要通过withRouter这个高阶组件，转换为路由组件使用。
-6. 编程式导航 
+
+6. 编程式导航
 
 ``` js
   // this.props.history.push(url); // push是在历史记录新增一条记录
@@ -765,7 +846,6 @@ cnpm i react-router-dom --save
 
 - URLSearchParams
 
-
 ```jsx
 // URLSearchParams传参，不用安装其他内容
 let search = new URLSearchParams(this.props.location.search)
@@ -774,7 +854,6 @@ console.log(search.get('title'));
 ```
 
 - queryString.parse
-
 
 ```jsx
  // 方式二,需要安装querystringify
@@ -845,6 +924,7 @@ render() {
     </div>
   )
 ```
+
 #### antd
 
 1. 下载
@@ -875,7 +955,9 @@ export default class Index extends Component {
 }
  
 ```
+
 ## react第四天 fetch和redux
+
 #### axios数据交互
 
 1. 安装axios
@@ -896,14 +978,16 @@ cnpm i axios --save
   }) 
  
 ```
+
 3. 配置代理之手动配置
 
-+ 安装http-proxy-middleware
+- 安装http-proxy-middleware
 
 ```js
 cnpm i http-proxy-middleware --save
 ```
-+ 创建setupProxy.js文件
+
+- 创建setupProxy.js文件
 
 在src下创建文件【setupProxy.js】js
 
@@ -944,6 +1028,7 @@ npm start  #重启项目
       console.log(res);
   })
 ```
+
 ### 2-2.fetch之post请求
 
 ```jsx
@@ -962,6 +1047,7 @@ npm start  #重启项目
         console.log(res);
     })  
 ```
+
 ### 2-3.fetch之封装
 
 ```jsx
@@ -1040,6 +1126,7 @@ action = {type:'',data:''}
 
 - 使用纯函数进行修改
  纯函数的要求：函数的返回结果只依赖于它的参数、函数执行过程里面没有副作用
+
 ```
 为了描述 action 如何改变 state tree ，你需要编写 reducers。
 ```
@@ -1090,8 +1177,6 @@ const initialState = {
 }
 ```
 
- 
-
 ##### 4-4.action
 
 - action
@@ -1107,8 +1192,6 @@ Action 是一个对象。其中的type属性是必须的，表示 Action 的名�
  store.dispatch(action)
 ```
 
- 
-
 ##### 4-5.reducer
 
 - reducer
@@ -1118,8 +1201,6 @@ Store 收到 Action 以后，必须给出一个新的 State，这样 View 才会
  
 Reducer 是一个函数，它接受 Action 和当前 State 作为参数，返回一个新的 State。
 ```
-
- 
 
 ```jsx
 // 声明一个reducer函数
@@ -1140,8 +1221,6 @@ const reducer = (state=initialState,action)=>{
     }
 }
 ```
-
- 
 
 #### 5.store常用的方法
 
@@ -1188,8 +1267,11 @@ componentDidMount(){
         this.un()
     }
 ```
+
 ## react第五天
+
 #### Action Creator：action创建函数是将action作为一个函数进行封装,为了在store和view中进行方便调用
+
 ``` jsx
   actionCreator = {
     // changeName是一个函数，是actionCreator的一个方法.
@@ -1198,11 +1280,14 @@ componentDidMount(){
     changeAge: (age) => ({ type: CHANGEAGE, age: age }),
   }
 ```
+
 #### ActionTypes:用来管理整个项目所有的action的type
+
 ``` jsx
   export const CHANGEAGE = 'changeAge';
   export const CHANGENAME = 'changeName';
 ```
+
 ``` jsx
   import {CHANGEAGE, CHANGENAME} from './type'
   // 修改数据的纯函数：reducer
@@ -1226,6 +1311,7 @@ componentDidMount(){
   }
 }
 ```
+
 ``` jsx
   import {CHANGEAGE, CHANGENAME} from '../store/type'
   actionCreator = {
@@ -1235,9 +1321,13 @@ componentDidMount(){
     changeAge: (age) => ({ type: CHANGEAGE, age: age }),
   }
 ```
+
 将type.js中的变量导入到各个组件以及store中，保证整个项目的每个action的type属性都使用这里的变量，提高项目的可维护性。
+
 #### reducer的拆分与合并
+
   > 通过modules拆分不同模块的代码，再通过combineReducers方法将他们联合，最终创建store
+
 ``` jsx
   // 导入不同模块中的内容
   import orderReducer from './modules/order'
@@ -1252,7 +1342,9 @@ componentDidMount(){
 
   export default store
 ```
+
 其中，info模块代码如下，user模块类似，详见代码部分。
+
 ```  jsx
   // 初始化数据
   const initState = {
@@ -1284,21 +1376,28 @@ componentDidMount(){
 
   export default reducer;
 ```
+
 #### redux devTools调试工具：类似vue-devtools，可以在浏览器中看到当前数据状态等信息
-  1. 打开chrome->扩展程序->选择下载好的devTool工具(地址：https://github.com/zalmoxisus/redux-devtools-extension/releases，选择firefox即可)
+
+  1. 打开chrome->扩展程序->选择下载好的devTool工具(地址：<https://github.com/zalmoxisus/redux-devtools-extension/releases，选择firefox>即可)
   2. 安装依赖包
   cnpm i redux-devtools-extension --save-dev
   3. 在代码中使用
+
 ``` js
   import {composeWithDevTools} from 'redux-devtools-extension'
   const store = createStore(rootReducer,composeWithDevTools(applyMiddleware()))
   export default store
 ```
+
 #### react-redux
+
   > react-redux是redux的官方react绑定库,即为react准备的比较特殊的redux版本。它能够使你的React组件从redux store中读取数据，并且向store分发actions以更新数据 作用:为了方便组件关联状态
+
 1. 安装
 cnpm i react-redux --save
 2. 在src/index.js中使用
+
 ``` js
   // 全局引入store，方便全局使用
   import store from './store'
@@ -1316,15 +1415,18 @@ cnpm i react-redux --save
     document.getElementById('root')
   );
 ```
+
 3. 在组件中使用
   react-redux 提供connect方法，用于从 UI 组件生成容器组件。react-redux将组件分成两类：容器型组件（有数据和逻辑）、UI组件（没有数据和逻辑，只是呈现内容）
+
   ``` jsx
     let ReactRedux = connect(mapStateToProps, mapDispatchToProps)(ReactReduxUI)
     // ReactReduxUI是ui组件，通过connect()使他变成了容器型组件（ReactRedux），暴露容器性组件出去
     export default ReactRedux
   ```
+
 4. 容器型组件VS展示型组件
- 
+
 |            | 容器型组件                   | 展示型组件      |
 | ---------- | ----------------------- | ---------- |
 | 关注点        | 逻辑[取数据,更新数据]            | UI的展现      |
@@ -1332,10 +1434,14 @@ cnpm i react-redux --save
 | 读数据        | 从redux的store 中获取        | 从props中获取  |
 | 写数据        | 发送redux actions         | 调用props的回调 |
 | 如何创建       | 通过react-redux connect创建 | 手写         |
+
 5. mapStateToProps类似vuex中的mapState和mapGetters，将数据映射到组件中，用来获取数据
 6. mapDispatchToProps类似vuex中的mapAction和mapMutation，将修改数据的方法映射到组件中，用来触发数据的修改
+
 #### redux高阶
+
   1. bindActionCreators：将单个或多个ActionCreator转化为dispatch(action)的函数集合形式，统一返回
+
   ``` jsx
   // 导入bindActionCreators，将各个action一起导入
   import {bindActionCreators} from 'redux'
@@ -1350,8 +1456,11 @@ cnpm i react-redux --save
   ```
   
 #### Redux中间件
+
   > Redux middleware 提供了一个分类处理 action 的机会。在 middleware 中，我们可以检阅每一个流过的 action,并挑选出特定类型的 action 进行相应操作，以此来改变 action。
+
   1. 自己封装中间件
+
   ``` jsx
   // store/index.js
   // 1.封装中间件
@@ -1363,13 +1472,16 @@ cnpm i react-redux --save
   }
   const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(logger)))
   ```
+
   2. redux-logger中间件,使用action的中间件,一般放在参数的最后一位
-  + 下载
+
+- 下载
   cnpm i redux-logger --save
-  + 引入
+- 引入
   // 引入redux-logger
   import {logger} from 'redux-logger'
-  + 使用
+- 使用
+
   ``` jsx
   store/index.js
   const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(logger)))
@@ -1377,24 +1489,27 @@ cnpm i react-redux --save
   ```
   
 #### 项目目录设计
+
 1. 按照类型划分
+
 ```Js
-  actions		#action creator
+  actions  #action creator
     action1.js
       action2.js
-  reducers 	#reducer函数
+  reducers  #reducer函数
     reducer1.js
       reducer2.js
-  containers	#容器型组件
+  containers #容器型组件
     container1.jsx 
       container2.jsx 
-  components	#展示型组件
+  components #展示型组件
     components1.js
       components2.js
 ```
+
 总结:如果需要修改一个功能,则需要修改好几个文件.
 2. 按照功能设计
- 
+
 ```js
   feature1        #功能1
       components  #展示型组件
@@ -1409,11 +1524,11 @@ cnpm i react-redux --save
       reducer.js #reducer函数
      actrions.js #action creator
 ```
- 
+
 总结:如果按照功能设计来来分.数据会存在重复使用,会造成代码冗余的效果
 3. ducks设计模式
 ducks模式将reducer,action Type和actions绑定到同一个目录中.导致减少样板.
- 
+
 ```js
   src
       -components     #公共组件
@@ -1435,16 +1550,19 @@ ducks模式将reducer,action Type和actions绑定到同一个目录中.导致减
 ```
 
 ## react第六天
+
 #### hooks
- 
+
 1. hooks介绍
- 
-+ 什么是hooks
+
+- 什么是hooks
+
 ```
 不编写类的情况下使用 state(状态) 和其他 React 功能,hooks是在react16.8新增功能
 ```
-+ 主要解决的问题
- 
+
+- 主要解决的问题
+
 ```
 1.用于在函数组件中引入状态管理和生命周期方法.
  
@@ -1452,8 +1570,9 @@ ducks模式将reducer,action Type和actions绑定到同一个目录中.导致减
  
 3.完全脱离'类',便可写出一个全功能的组件.
 ```
-+ 优点
- 
+
+- 优点
+
 ```
 1.避免在被广泛使用的函数组件在后期迭代过程,需要承担一些副作用,而必须重构成类组件.
  
@@ -1461,29 +1580,29 @@ ducks模式将reducer,action Type和actions绑定到同一个目录中.导致减
  
 3.hooks出现之后,我们将复用逻辑取到组件顶层,而不是强行提升到父组件中.这样就能够避免HOC和render props带来的嵌套地域.
 ```
- 
-+ react中钩子的作用及常用的钩子
- 
+
+- react中钩子的作用及常用的钩子
+
 ```
 从外部引入对象的钩子函数,来做响应的功能.
 ```
- 
- 
+
 常用的钩子;
- 
+
 ```
 useState():为函数组件引入状态
 useEffect():副作用钩子
 useReducer():action钩子
 useContext():共享状态钩子
 ```
+
 2. useState
- 
+
 ```
 本身是一个函数,来自react包,参数和返回值,返回一个数组.
 作用:状态钩子,为函数组件内提供状态
 ```
- 
+
 ```jsx
 pages/useState/Index.js
 import React,{useState} from 'react'
@@ -1506,16 +1625,16 @@ export default ()=>{
     )
 }
 ```
- 
+
 3. useEffect
- 
+
 ```
 作用:useEffect用于处理组件中的effect，通常用于请求数据，事件处理，订阅等 相关操作
 语法:他接收两个参数。参数一:进行的异步操作  参数二:是数组，用来给出Effect的 依赖项
 ```
- 
+
 类使用组件实现count的更新
- 
+
 ```jsx
 import React, { Component } from 'react'
  
@@ -1545,9 +1664,7 @@ export default class Effect extends Component {
 }
  
 ```
- 
- 
- 
+
 ```
 useEffect Hook 看做 componentDidMount，componentDidUpdate 和 componentWillUnmount 这三个函数的组合。
 1).只有一个回调函数作为参数，相当于 componentDidMount componentDidUpdate
@@ -1555,9 +1672,9 @@ useEffect Hook 看做 componentDidMount，componentDidUpdate 和 componentWillUn
 3).第二个参数是[count],相当于componentDidMount 和count变化，才执行
 4).return:相当于componentWillUnmount
 ```
- 
+
 (1).只有一个回调函数作为参数，相当于 componentDidMount + componentDidUpdate
- 
+
 ```jsx
 import React,{useEffect,useState} from 'react'
  
@@ -1578,9 +1695,9 @@ export default ()=>{
     )
 }
 ```
- 
-(2)第二个参数是[],相当于componentDidMount 
- 
+
+(2)第二个参数是[],相当于componentDidMount
+
 ```jsx
 import React,{useEffect,useState} from 'react'
  
@@ -1602,9 +1719,9 @@ export default ()=>{
     )
 }
 ```
- 
+
 (3)第二个参数是[count],相当于componentDidMount 和count变化，才执行
- 
+
 ```jsx
 import React,{useEffect,useState} from 'react'
  
@@ -1631,9 +1748,9 @@ export default ()=>{
     )
 }
 ```
- 
+
 (4)return:相当于componentWillUnmount
- 
+
 ```jsx
 import React,{useEffect,useState} from 'react'
  
@@ -1658,21 +1775,21 @@ export default ()=>{
     )
 }
 ```
- 
+
 4. useReducer
- 
+
 ```
 作用:
 (1)useReducer() 提供了状态管理
 (2)基本原理是通过用户在页面中发起 action, 从而通过reducer方法来改变state, 从而实现页面和状态的通信
 ```
- 
+
 语法
- 
+
 ```js
 const [state, dispatch] = useReducer(reducer, initState);
 ```
- 
+
 ```jsx
 import React,{useReducer} from 'react'
  
@@ -1714,20 +1831,20 @@ export default ()=>{
 ```
 
 5. useContext
- 
+
 ```
 作用:
 1.在组件之间共享状态,
 2.可以解决react逐层通过props传递
 3.她接受React.createContext()的返回结果作为参数
 ```
- 
+
 ```
 场景:在Hooks中，如果父组件传递数据给子组件，子组件没有使用，向下传递，子 组件的子组件进行使用，如果通过Props传递，可以使用，但是如果层级比较多，就会不方 便，那么可以子组件的子组件可以通过useContext进行接收数据。
 ```
- 
+
 Context.jsx
- 
+
 ```jsx
 import react,{createContext,useState} from 'react'
 import Child from './Child'
@@ -1746,9 +1863,9 @@ export default ()=>{
     )
 }
 ```
- 
+
 Child.jsx
- 
+
 ```jsx
 import React from 'react'
 import Child1 from './Child1'
@@ -1761,9 +1878,9 @@ export default ()=>{
     )
 }
 ```
- 
+
 Child1.jsx
- 
+
 ```jsx
 import React,{useContext} from 'react'
 import {myContext} from './Context'
@@ -1776,17 +1893,17 @@ export default ()=>{
     )
 }
 ```
- 
+
 4. 自定义hook
- 
+
 ```
 构建自己的 Hooks 可以将组件逻辑提取到可重用的函数中。
 当我们想要在两个 JavaScript 函数之间共享逻辑时，我们会将共享逻辑提取到第三个函数。 组件和 Hook 都是函数，所以这种办法也适用于它们!
 自定义 Hook 是一个 JavaScript 函数，其名称以 ”use” 开头，可以调用其他 Hook。
 ```
- 
+
 Login.jsx
- 
+
 ```jsx
 import React,{useState} from 'react'
  
@@ -1813,9 +1930,9 @@ export default ()=>{
     )
 }
 ```
- 
+
 自定义的hook
- 
+
 ```jsx
 import React,{useState} from 'react'
 // 自定义hook
@@ -1854,8 +1971,9 @@ export default ()=>{
     )
 }
 ```
+
 5. hooks规则
- 
+
 1.只在顶层使用hook
- 
+
 2.只在react函数中调用hook,不要在普通javascript函数中调用hook
