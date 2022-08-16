@@ -41,5 +41,21 @@
 #### 构建项目
 
 + yarn create umi
-+ npx umi g pages demo ( Making a demo Page  )
++ npx umi g page demo ( Making a demo Page  )
++ npx umi g page class/index  ( Making a demo Page in class  )
+  + 在 layouts 组件中配置路由地址
+  + umi是配置好的路由动态的不用在配置路由地址以及文件
+
+##### 动态路由
+
+```js
+
+
+
+
+
+
+
+
+```
   
