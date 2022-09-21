@@ -10,6 +10,7 @@ const useUrlLoder = (url: string, deps: any[] = []) => {
             setData(res.data)
             setLoading(false)
         })
+        console.log(deps, 'deps');
 
     }, deps)
     return [data, loading]
