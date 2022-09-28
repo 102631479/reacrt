@@ -1,9 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { ThemContsxt } from '../App';
+
 const LikeButton: React.FC = () => {
     const [like, setLike] = useState(0)
     const [obj, setObj] = useState({ like: 0, on: true })
     const likeRef = useRef(0)
     const didMountRef = useRef(false)
+    const theme = useContext(ThemContsxt)
+    console.log(theme); 
+    const style={
+        color:theme.color,
+        background:theme.backgorund
+    }
     // 利用 useRef 获得dom节点
     const domRef = useRef<HTMLInputElement>(null)
     useEffect(() => {
@@ -12,7 +20,6 @@ const LikeButton: React.FC = () => {
     useEffect(() => {
         if (didMountRef.current) {
             console.log('正确didMountRef');
-
         } else {
             didMountRef.current = true
         }
@@ -41,7 +48,7 @@ const LikeButton: React.FC = () => {
                 likeRef.current++
             }}>{like}👍</button>
 
-            <button onClick={() => {
+            <button style={style} onClick={() => {
                 setObj({ like: obj.like, on: !obj.on })
             }}>{obj.on ? 'on' : 'off'}👍</button>
 
@@ -51,8 +58,6 @@ const LikeButton: React.FC = () => {
              在任意 渲染中 props  和  state 的值是不变的
              如果 props 和 state 使用他们的任何值是独立的话  那么他们的任何值都是独立的
              
-
-
             */}
         </>
     )
