@@ -14,6 +14,5 @@ const useUrlLoder = (url: string, deps: any[] = []) => {
 
     }, deps)
     return [data, loading]
-
 }
 export default useUrlLoder

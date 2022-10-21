@@ -18,19 +18,23 @@ interface IThemeProps {
 }
 const themes: IThemeProps = {
   // 浅色
-  'light': {
-    color: '#000',
+  'red': {
+    color: 'red',
     backgorund: '#eee'
   },
   // 深色
 
   'dark': {
     color: '#fff',
+    backgorund: 'green'
+  },
+  'light': {
+    color: '#fff',
     backgorund: '#222'
   },
 
 }
-export const ThemContsxt = React.createContext(themes.light)
+export const ThemContsxt = React.createContext(themes.dark)
 // Contsxt 有两个api 一个是数据提供者 一个是数据消费者
 
 
@@ -43,6 +47,7 @@ const App: React.FC = () => {
   const dog = data as ISshowResult
   return (
     <div className="App">
+      {/* 描述数据提供者 */}
       <ThemContsxt.Provider value={themes.light}>
         <header className="App-header">
           <Hello message='你好'></Hello>

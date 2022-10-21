@@ -1,5 +1,6 @@
 import React from 'react';
-
+//  组件 hoc 的用法
+//   react hoc 的用法  传入一个新的组件 返回一个 新的组件 更像是一个组件的装饰器
 interface IloaderState {
     data: any,
     isLoading: boolean
@@ -27,7 +28,7 @@ const withLoader = <P extends IloaderState>(WrappedComponent: React.ComponentTyp
             return (
                 <>
                     {
-                        (isLoading || !data)?<p>data is loading</p  >: < div  {...this.props as P } />
+                        (isLoading || !data)?<p>data is loading</p  >: < div  {...this.props as P }  />
                         // ?  <p>data is loading<p /> : <WrappedComponent {...this.props as P} data={data}></WrappedComponent>
                     }
                 </>
